@@ -88,6 +88,7 @@ class Karyawan extends InfoPribadi {
     
     @Override
     public void tampilkanInfo() {
+        System.out.println("Karyawan ID: " + getId());
         System.out.println("Nama: " + getNama());
         System.out.println("Umur: " + getUmur());
         System.out.println("Alamat: " + getAlamat());
@@ -113,6 +114,9 @@ class ListKaryawan {
     }
     
     public List<Karyawan> semuaKaryawan() {
+        if (karyawanList == null) {
+            return null;
+        }
         return new ArrayList<>(karyawanList);
     }
     
@@ -144,6 +148,7 @@ public class Main {
         // CRUD
         Scanner scanner = new Scanner(System.in);
         while (true) {
+            System.out.println("=========================");
             System.out.println("Halaman Data Karyawan");
             System.out.println("1. Tambah Karyawan");
             System.out.println("2. Tampilkan Semua Karyawan");
@@ -153,6 +158,7 @@ public class Main {
             System.out.println("6. Keluar");
             System.out.print("Pilih: ");
             int pilih = scanner.nextInt();
+            System.out.println("=========================");
             
             if (pilih > 0 && pilih <= 6) {
                 switch (pilih) {
@@ -160,7 +166,7 @@ public class Main {
                         func_tambahKaryawan(scanner, listKaryawan);
                         break;
                     case 2:
-                        listKaryawan.semuaKaryawan();
+                        func_tampilkanAllKaryawan(listKaryawan);
                         break;
                     case 3:
                         func_tampilkanKaryawan(scanner, listKaryawan);
@@ -198,19 +204,31 @@ public class Main {
         listKaryawan.tambahKaryawan(karyawanBaru);
     }
     
+    public static void func_tampilkanAllKaryawan(ListKaryawan listKaryawan) {
+        List<Karyawan> listsKaryawan = listKaryawan.semuaKaryawan();
+            
+        if (listsKaryawan != null) {
+            for (Karyawan karyawan : listsKaryawan) {
+                karyawan.tampilkanInfo();
+            }
+        } else {
+            System.out.println("Karyawan Kosong");
+        }
+    }
+
+    
     public static void func_tampilkanKaryawan(Scanner scanner, ListKaryawan listKaryawan) {
         // Menampilkan Karyawan
+        if (listKaryawan == null) {
+            System.out.println("Karyawan Kosong");
+            return;
+        }
         System.out.print("Pilih Karyawan Berdasarkan ID: ");
         int idKaryawan = scanner.nextInt();
         
         Karyawan karyawan = listKaryawan.tampilkanKaryawan(idKaryawan).orElse(null);
         if (karyawan != null) {
-            System.out.println("Karyawan " + idKaryawan + ":");
-            System.out.println("Nama: " + karyawan.getNama());
-            System.out.println("Umur: " + karyawan.getUmur());
-            System.out.println("Alamat: " + karyawan.getAlamat());
-            System.out.println("Posisi: " + karyawan.getPosisi());
-            System.out.println("Gaji: " + karyawan.getGaji());
+            karyawan.tampilkanInfo();
         } else {
             System.out.println("Karyawan Tidak Ditemukan");
         }
@@ -218,6 +236,10 @@ public class Main {
     
     public static void func_updateKaryawan(Scanner scanner, ListKaryawan listKaryawan) {
         // Update Data Karyawan
+        if (listKaryawan == null) {
+            System.out.println("Karyawan Kosong");
+            return;
+        }
         System.out.print("Pilih Karyawan Berdasarkan ID: ");
         int idKaryawan = scanner.nextInt();
         
@@ -245,6 +267,7 @@ public class Main {
             karyawan.setPosisi(posisi);
             karyawan.setGaji(gaji + bonusgaji);
             listKaryawan.updateKaryawan(karyawan);
+            System.out.println("Berhasil Di Update");
         } else {
             System.out.println("Karyawan Tidak Ditemukan");
         }
@@ -252,6 +275,10 @@ public class Main {
     
     public static void func_deleteKaryawan(Scanner scanner, ListKaryawan listKaryawan) {
         // Menghapus Karyawan
+        if (listKaryawan == null) {
+            System.out.println("Karyawan Kosong");
+            return;
+        }
         System.out.print("Pilih Karyawan Berdasarkan ID: ");
         int idKaryawan = scanner.nextInt();
         
@@ -259,6 +286,7 @@ public class Main {
         
         if (karyawan != null) {
             listKaryawan.deleteKaryawan(idKaryawan);
+            System.out.println("Berhasil Di Hapus");
         } else {
             System.out.println("Karyawan Tidak Ditemukan");
         }
